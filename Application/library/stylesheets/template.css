@@ -1,0 +1,65 @@
+/*
+Theme Name: GmdtaFilms
+Version: 2.0
+Author: Clickbanx
+Author URI: http://www.clickbanx.co.uk
+*/
+
+
+.footspace{
+  display:block;
+	width:30px;
+	height:30px;
+	clear:both;
+}
+
+
+/* basics */
+body {background:#9C9D95; /*font:10pt Courier, helvetica,arial,sans-serif;*/ margin:0px; text-align:center; font:11pt Arial, helvetica, geneva, sans-serif; line-height:1.6em; } 
+
+/*body {background:#9C9D95; font:10pt;}*/
+
+/* header */
+
+.header_top  {display:block; width:780px; height:4px; margin-left:auto; margin-right:auto; background:url('/application/library/media/header_top.png') no-repeat; #ccc; margin-top:20px;}
+.logo_holder {display:table; width:780px; height:auto !important; background:#fff; margin-left:auto; margin-right:auto; clear:both;}
+.logo a      {display:block; float:left; width:268px; height:92px; background:url('/application/library/media/logo.png') no-repeat #fff; margin-left:10px; margin-top:5px;}
+
+.toplink_holder {display:block; background:url('/application/library/media/navbg.jpg') repeat-x #fff; margin-left:auto; margin-right:auto; width:770px; height:43px; margin-top:5px;}
+.toplink_holder a {display:block; float:left; border:0px;}
+.toplink_holder a:hover {opacity:0.6;filter:alpha(opacity=60)}
+
+/* footer */
+
+.footer_bottom {display:block; width:780px; height:4px; margin-left:auto; margin-right:auto; background:url('/application/library/media/footer_bottom.png') no-repeat; #ccc;}
+.bottomlink_holder {display:block; margin-left:auto; margin-right:auto; width:760px; padding:5px; padding-top:10px; margin-bottom:5px; font-size:8pt; border-top:solid 3px #ccc; margin-top:30px;}
+.bottomlink_holder a {text-align:center; margin-right:10px; text-decoration:underline; color:#333;}
+.bottomlink_holder a:hover {text-decoration:none;}
+.bottomlink_holder .middot {margin-right:10px;}
+
+/* main body */
+
+.mainbody {display:table; width:774px; height:auto !important; margin-left:auto; margin-right:auto; background:#fff; padding-left:3px; padding-right:3px;}
+
+/* table cells and rows */
+
+.tablerow  { display:table; clear:both;  }
+.tablecell { display:block; float:left; }
+
+/* copyright holder */
+
+.copyright_holder { display:table; width:765px; color:#fff; margin-left:auto; margin-right:auto; padding-left:10px; padding-right:5px; font-size:8pt; margin-top:5px; margin-bottom:50px;}
+
+/* left content */
+
+.leftcontent {display:block; width:160px; height:auto !important; }
+.left_titles a{display:block; clear:both; margin-bottom:20px; }
+.left_titles a:hover {opacity:0.4;filter:alpha(opacity=40)}
+.left_titles_off a{display:block; clear:both; margin-bottom:5px; cursor:default; }
+
+/* notification bar */
+
+.notification-bar-container{ position:relative;display:block;width:780px;overflow:hidden; background:#FFEBE8;  top:0; z-index:1000; opacity:0.9;filter:alpha(opacity=90); 
+                             margin-left:auto; margin-right:auto; border-bottom:solid 1px #DD3C10; border-left:solid 1px #DD3C10; border-right:solid 1px #DD3C10; color:#333;
+														 margin-bottom:5px;}
+.notification-bar-container .message{display:block; padding:5px; font-size:8pt; width:100%; line-height:1.6em; text-align:left;}

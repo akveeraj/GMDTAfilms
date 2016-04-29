@@ -1,0 +1,59 @@
+<%
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' FileName      : CDONTS.Plugin
+// ' Function      : Sends a mail message to a recipient using the CDONTS component
+// ' Requirements  : CDONTS.DLL installed & registered
+// ' Trigger       : Call CDONTSMail( MxBody, MxSubject, MxRecipient, MxReplyTo, MxFrom, MxFromName, MxQueue, MxIsHtml, MxAppend )
+// ' Author        : Patrick Johnson - contact@patrickjohnson.co.uk
+// ' Version       : 6.2.0
+// ' Last Updated  : 21/05/2012 - P Johnson
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     Sub CDONTSMailer( MxBody, MxSubject, MxRecipient, MxReplyTo, MxFrom, MxFromName, MxQueue, MxIsHtml, MxAppend )
+		   
+			 MxBody        = MxBody
+			 MxSubject     = MxSubject
+			 MxFrom        = MxFrom
+			 MxFromName    = MxFromName
+			 MxQueue       = MxQueue
+			 MxIsHtml      = MxIsHtml
+		   Schema        = "http://schemas.microsoft.com/cdo/configuration"
+			 
+			 On Error Resume Next
+			 
+			 If MxAppend = 1 Then
+			   MxBody  = MxBody & MxAppendText
+			 End If
+			 
+			 Set Mx = CreateObject( MxSelectedComponent )
+			 Mx.Configuration.Fields.Item( Schema & "/sendusing" )              = 2
+			 Mx.Configuration.Fields.Item( Schema & "/smtpserver" )             = MxServer
+			 Mx.Configuration.Fields.Item( Schema & "/smtpserverport" )         = MxPort
+			 Mx.Configuration.Fields.Item( Schema & "/smtpusessl" )             = MxUseSSL
+			 Mx.Configuration.Fields.Item( Schema & "/smtpconnectiontimeout" )  = MxTimeOut
+			 
+			 If MxSmtpAuth = 1 Then
+			   Mx.Configuration.Fields.Item( Schema & "/sendusername" ) = MxUsername
+				 Mx.Configuration.Fields.Item( Schema & "/sendpassword" ) = MxPassword
+			 End If
+			 
+			 Mx.Configuration.Fields.Update
+			 Mx.To       = MxRecipient
+			 Mx.Subject  = MxSubject
+			 Mx.From     = MxFromName
+			 Mx.TextBody = MxBody
+			 Mx.ReplyTo  = MxReplyTo
+			 
+			 'On Error Resume Next
+			 
+			 If Err.Number = 0 Then
+				 Mx.Send
+			 Else
+			   Response.Write Err.Number & "<br/>" & Err.Description
+			 End If 
+			 
+		 End Sub
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+%>

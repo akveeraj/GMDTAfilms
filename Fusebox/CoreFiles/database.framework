@@ -1,0 +1,176 @@
+<%
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' FileName      : Database.Framework
+// ' Function      : Creates the Database connection & SQL queries
+// ' Requirements  : None
+// ' Trigger       : None
+// ' Author        : Patrick Johnson - contact@patrickjohnson.co.uk
+// ' Version       : 6.2.0
+// ' Last Updated  : 21/05/2012 - P Johnson
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Build Connection String
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     Select Case( DB_Type )
+		   
+			 Case( 1 )
+			   ConnString = "DSN=" & ODBC_DB_Name & ";uid=" & DB_UserName & ";pwd=" & DB_Password & ";"
+			 Case( 2 )
+			   ConnString = "Driver={MySQL ODBC 3.51 Driver}; SERVER=" & DB_Server & "; DATABASE=" & SQL_DBName & "; PORT=" & DB_Port & "; userid=" & DB_Username & "; PASSWORD=" & DB_Password & "; OPTION=3"
+			 Case( 3 )
+			   ConnString = "DSN=" & ODBC_DB_Name & ";uid=" & DB_UserName & ";pwd=" & DB_Password & ";"
+			 Case( 4 )
+			   ConnString = "Driver={" & DB_Driver & "}; DBQ=" & DB_Location & ";" & _
+				              "uid=" & DB_Username & ";pwd=" & DB_Password & ";"
+     End Select
+		 
+		 ConnString = ConnString
+		 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Define Variables
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     fw_DBString     = ConnString
+		 fw_UseDatabase  = UseDatabase
+		 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Replace single quotes ( function ) 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     Function ReplaceSingleQuotes( fw_Value )
+		   
+			 ReplaceSingleQuotes = Replace( fw_Value, "'", "''" )
+			 
+		 End Function
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Initiate Database connection
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    Sub Connect( fw_DBString )
+		
+		  Set ConnTemp = Server.CreateObject( "adodb.connection" )
+			  'ConnTemp.ConnectionString = fw_DBString
+				ConnTemp.Mode = 3
+				ConnTemp.Open fw_DBString
+		
+		End Sub
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Standard Database Query
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     If fw_UseDatabase = 1 Then
+		 
+		   Sub FetchData( SQL, RsTemp, ConnTemp )
+			 
+			   Call Connect( fw_DBString )
+				 
+				 Set RsTemp = Server.CreateObject( "adodb.recordset" )
+				 MySQL      = SQL
+			   RsTemp.Open MySQL, ConnTemp, 1,2
+			 
+			 End Sub
+		 
+		 End If
+		 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Return Random Record
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     If fw_UseDatabase = 1 Then
+		 
+		   Sub RandomRecord( SQL, RsTemp, ConnTemp )
+			 
+			   Call Connect( fw_DBString )
+				 
+				 SET RsTemp      = Server.CreateObject( "adodb.recordset" )
+				 MySQL           = SQL
+				 RsTemp.Open MySQL, ConnTemp, 3, 1
+				 IntTotalRecords = RsTemp.RecordCount
+				 Randomize()
+				 IntRandomNumber = Int( IntTotalRecords * Rnd )
+				 RsTemp.Move IntRandomNumber
+			 
+			 End Sub
+		 
+		 End If
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Recordset Limiter with Pageing
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+  
+	   If fw_UseDatabase = 1 Then
+	
+      Sub PagingData( SQL, RsTemp, ConnTemp, PageLimit )
+	
+	      Call Connect( fw_DBString )
+			
+			  Set RsTemp            = Server.CreateObject( "adodb.recordset" )
+			  RsTemp.CursorLocation = 3
+			  MySQL                 = SQL
+			  RsTemp.Open SQL, ConnTemp
+			  ListCount             = RsTemp.RecordCount
+			  RsTemp.PageSize       = PageLimit
+			  nPages                = RsTemp.PageCount
+	
+	    End Sub
+
+	   End If
+	
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Horizontal Recordset with Pageing
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+     If fw_UseDatabase = 1 Then
+		 
+		   Sub HorizontalRSet( SQL, RsTemp, connTemp, PageLimit )
+			   
+				 Call Connect( fw_DBString )
+				 
+				 Set RsTemp            = Server.CreateObject( "adodb.recordset" )
+				 MySQL                 = SQL
+				 RsTemp.CursorLocation = 3
+				 RsTemp.Open MySQL, ConnTemp
+				 RsTemp.PageSize       = PageLimit
+				 nPages                = RsTemp.PageCount
+				 
+		   End Sub
+			 
+		 End If
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Add Record / Delete Record / Save Record
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     If fw_UseDatabase = 1 Then
+		 
+		   Sub SaveRecord( SQL, RsTemp, ConnTemp )
+			   
+				 Call Connect( fw_DBString )
+				 Set RsTemp = ConnTemp.Execute( SQL )
+				 
+			 End Sub
+		 
+		 End If
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Close Database
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    If fw_UseDatabase = 1 Then
+	
+      Sub CloseRecord( RsTemp, ConnTemp )
+	
+	      On Error Resume Next
+		    RsTemp.Close()
+		    Set RsTemp   = Nothing
+		    Set ConnTemp = Nothing
+	
+	    End Sub
+    
+		 End If
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+%>

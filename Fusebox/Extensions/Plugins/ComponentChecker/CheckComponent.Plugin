@@ -1,0 +1,27 @@
+<%
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' FileName      : CheckComponent.Plugin
+// ' Function      : Checks whether a component is installed before it is executed
+// ' Requirements  : Null
+// ' Trigger       : CheckServerObject( ProgId )
+// ' Author        : Patrick Johnson - contact@patrickjohnson.co.uk
+// ' Version       : 6.2.0
+// ' Last Updated  : 21/05/2012 - P Johnson
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     Function CheckServerObject( ProgId )
+		 
+		   On Error Resume Next
+			 Set TmpObject = Server.CreateObject( Progid )
+			 If Err.Number = 0 Then
+			   CheckServerObject = True
+			 Else
+			   checkServerObject = False
+			 End If
+			 
+			 Set TmpObject = Nothing
+		 
+		 End Function
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+%>

@@ -1,0 +1,136 @@
+<%
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' FileName      : Database.Framework
+// ' Function      : Creates the Database connection & SQL queries
+// ' Requirements  : None
+// ' Trigger       : Call LoadCircuit( fw_Circuit )
+// ' Author        : Patrick Johnson - contact@patrickjohnson.co.uk
+// ' Version       : 6.2.0
+// ' Last Updated  : 21/05/2012 - P Johnson
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Define Variables
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+      fw_Query         = Request.QueryString
+			fw_StartQuery    = Request.QueryString
+			fw_Query         = UrlDecode( fw_Query )
+			fw_Query         = Replace( fw_Query, "&", ";" )
+			fw_Query         = Replace( fw_Query, "=", ":" )
+			fw_Query         = Replace( fw_Query, ";", vbcrlf )
+			fw_OutPut        = ParseCircuit( "output", fw_Query )
+		  fw_Source        = ParseCircuit( "source", fw_Query )
+			fw_SourceFolder  = ParseCircuit( "circuit", fw_Query )
+			fw_SourceFolderLen = Len( fw_SourceFolder )
+
+			
+			If fw_SourceFolderLen > "" Then
+			  fw_Circuit  = fw_Source & "." & fw_SourceFolder
+				fw_Array    = Split( fw_Circuit, "." )
+				fw_File     = fw_Array( 0 )
+				fw_Folder   = fw_Array( 1 )
+			ElseIf fw_SourceFolder = "" AND Instr( fw_Circuit, "." ) > 0 Then
+			  fw_Circuit  = fw_Source 
+			  fw_Array    = Split( fw_Circuit, "." )
+				fw_File     = fw_Array( 0 )
+				fw_Folder   = fw_Array( 1 )
+			End If
+			
+			
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Get File Name AND Folder
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+     'If Instr( fw_Circuit, "." ) > 0 Then
+		 
+		'   fw_Array   = Split( fw_Circuit, "." )
+		'	 fw_File    = fw_Array( 0 )
+		'	 fw_Folder  = fw_Array( 1 )
+		 
+		' End If
+		 
+		 'If fw_Circuit = "" Then
+		   
+			' fw_FullPath = fw_IndexFullPath
+			 'Response.ContentType = "text/html"
+			 
+		 'Else
+		 
+		   Select Case( fw_Folder )
+			   
+				 Case "View", "VIEW", "view"
+				   fw_FullPath          = fw_ContentPath & fw_ContentPrefix & fw_File & "." & fw_AppLang
+					 Response.ContentType = "text/html"
+				
+				 Case "Actions", "ACTIONS", "actions"
+				   fw_FullPath          = fw_ActionsPath & fw_ActionsPrefix & fw_File & "." & fw_AppLang
+					 Response.ContentType = "text/html"
+					 
+				 Case "Controls", "CONTROLS", "controls"
+				   fw_FullPath          = fw_CtrlPath & fw_CtrlPrefix & fw_File & "." & fw_AppLang
+					 Response.ContentType = "text/html"
+					 
+				 Case "Doc", "DOC", "doc"
+				   fw_FullPath          = fw_ContentPath & fw_ContentPrefix & fw_File & "." & fw_AppLang
+					 Response.ContentType = "text/html"
+					 
+				 Case "Profile", "PROFILE", "profile"
+				   fw_FullPath          = fw_ContentPath & fw_ContentPrefix & "profile." & fw_AppLang
+					 Response.ContentType = "text/html"
+				 
+	
+				 Case Else
+				   fw_FullPath          = fw_IndexFullPath
+					 Response.ContentType = "text/html"
+
+			 End Select
+		 
+		 'End If
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Check File Exists
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+     Function CheckFile()
+	  
+		   Set FileSys = CreateObject( "Scripting.FileSystemObject" )
+		   CFObject    = FileSys.FileExists( Server.MapPath( fw_FullPath ) )
+		
+		   If CFObject = True or CFObject = true Then
+		    FilePassed = 1
+		   Else
+		    FilePassed = 0
+		   End If
+		
+		   CheckFile    = FilePassed
+		   Set FileSys  = Nothing
+		
+	   End Function
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+// ' Load Requested File
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    Sub LoadCircuit( fw_Circuit )
+			
+			If CheckFile  = 0 Then
+			  
+				Call CircuitError()
+										 
+			Else
+			  
+				If CheckFile = 1 Then
+				
+				  Set GetFile = CreateObject( "Scripting.FileSystemObject" )
+					If GetFile.FileExists( Server.MapPath( fw_FullPath )) = true or GetFile.FileExists( Server.MapPath( fw_FullPath )) = True Then
+					  Server.Execute( fw_FullPath )
+					End If
+				
+				End If 
+			   
+			End If
+			
+		End Sub
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------
+%>
